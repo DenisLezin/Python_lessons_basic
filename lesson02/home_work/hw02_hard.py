@@ -5,6 +5,9 @@ equation = 'y = -12x + 11111140.2121'
 x = 2.5
 # вычислите и выведите y
 
+k = float(equation[equation.find('=') + 1:equation.find('x')])
+b = float(equation[equation.find('x') + 1:].replace(' ', ''))
+print(f'y = {k * x + b}')
 
 # Задание-2: Дата задана в виде строки формата 'dd.mm.yyyy'.
 # Проверить, корректно ли введена дата.
@@ -20,10 +23,22 @@ x = 2.5
 date = '01.11.1985'
 
 # Примеры некорректных дат
+'''
 date = '01.22.1001'
 date = '1.12.1001'
 date = '-2.10.3001'
+'''
 
+res = False
+months_31 = [1, 3, 5, 7, 8, 10, 12]
+
+if len(date) == 10 and date[2] == '.' and date[5] == '.':
+    if int(date[6:]) >= 1 and int(date[6:]) <= 9999:
+        if int(date[3:5]) >= 1 and int(date[3:5]) <= 12:
+            res = (int(date[:2]) >= 1 and int(date[:2]) <= 31 if int(date[3:5]) in months_31 else 
+                  int(date[:2]) >= 1 and int(date[:2]) <= 30)
+
+print(res)
 
 # Задание-3: "Перевёрнутая башня" (Задача олимпиадного уровня)
 #
@@ -54,3 +69,23 @@ date = '-2.10.3001'
 #
 # Вход: 11
 # Выход: 5 3
+room = 16
+max_room = 1
+max_floor = 1
+lvl = 1
+# lvl = n ** 0.5 // 1 if n ** 0.5 % 1 == 0 else n ** 0.5 // 1 + 1
+while max_room < room:
+    lvl += 1
+    max_floor += lvl
+    max_room += lvl ** 2 
+
+min_floor = max_floor - lvl + 1
+min_room = max_room - lvl ** 2 + 1
+
+floors = [i for i in range(min_floor, max_floor + 1)]
+rooms = [i for i in range(min_room, max_room + 1)]
+
+print(f'lvl = {lvl}\nmin_floor = {min_floor}\nmax_floor = {max_floor}\nmin_room = {min_room}\nmax_room = {max_room}')
+print(floors)
+print(rooms)
+print(f'room floor = {int(min_floor + rooms.index(room) / lvl // 1)}')
