@@ -69,11 +69,12 @@ print(res)
 #
 # Вход: 11
 # Выход: 5 3
-room = 16
+
+room = 24
 max_room = 1
 max_floor = 1
 lvl = 1
-# lvl = n ** 0.5 // 1 if n ** 0.5 % 1 == 0 else n ** 0.5 // 1 + 1
+
 while max_room < room:
     lvl += 1
     max_floor += lvl
@@ -85,7 +86,5 @@ min_room = max_room - lvl ** 2 + 1
 floors = [i for i in range(min_floor, max_floor + 1)]
 rooms = [i for i in range(min_room, max_room + 1)]
 
-print(f'lvl = {lvl}\nmin_floor = {min_floor}\nmax_floor = {max_floor}\nmin_room = {min_room}\nmax_room = {max_room}')
-print(floors)
-print(rooms)
 print(f'room floor = {int(min_floor + rooms.index(room) / lvl // 1)}')
+print(f'room position = {int(rooms.index(room)) // lvl}')
