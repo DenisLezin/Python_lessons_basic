@@ -9,6 +9,60 @@
 # Ввод: -2/3 - -2
 # Вывод: 1 1/3
 
+import re
+
+str1 = '5/6 + 4/7'
+str2 = '-2/3 - -2'
+str3 = '5 8/3 + -7 4/5 - 4/3 + 8'
+
+# pattern = re.compile('[+-]?\d+ \d+/\d+')
+tr_num = re.findall('-?\d+? ?\d+/\d+|\d+/\d+|-?\d', str3)
+tr_sign =[i.strip() for i in re.findall(' [-+] ', str3)]
+
+res = [0, 0, 0]
+num = list(map(int, re.split(' |/', tr_num[0])))
+num1 = list(map(int, re.split(' |/', tr_num[3])))
+num2 = list(map(int, re.split(' |/', tr_num[2])))
+
+def optim_num(num):
+
+    [num.append(0) for _ in range(2)] if len(num) == 1 else num
+    num.insert(0, 0) if len(num) == 2 else num
+
+    if num[2] != 0 and num[1] % num[2] == 0:
+        num[0] += num[1] // num[2]
+        num[1] = 0
+        num[2] = 0
+    elif num[2] != 0:
+        num[0] += num[1] // num[2]
+        num[1] = num[1] % num[2]
+
+    return num
+
+
+'''
+    denominator
+'''
+# if res[2] == 0:
+#     res[2] == num[2]
+'''
+    numerator
+'''
+
+'''
+   integer
+'''
+
+print(tr_num)
+print(tr_sign)
+print('num    ', num)
+print('num_f  ', optim_num(num))
+print('num1   ', num1)
+print('num1_f ', optim_num(num1))
+print('num2   ', num2)
+print('num2_f ', optim_num(num2))
+
+print(res)
 
 # Задание-2:
 # Дана ведомость расчета заработной платы (файл "data/workers").
