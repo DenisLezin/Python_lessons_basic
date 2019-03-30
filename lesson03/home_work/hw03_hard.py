@@ -13,7 +13,29 @@ import re
 
 str1 = '5/6 + 4/7'
 str2 = '-2/3 - -2'
-str3 = '5 8/3 + -7 4/5 - 4/3 + 8'
+str3 = '5 4/6 + -7 4/5 - 4/3 + 8'
+
+def g_delimiter1(n, m):
+    nums = [max(n, m), min(n, m)]
+    return nums[len(nums) - 1] if nums[len(nums) - 2] % nums[len(nums) - 1] == 0 else \
+        g_delimiter1(nums[len(nums) - 1], nums[len(nums) - 2] % nums[len(nums) - 1])
+
+
+def optim_num(num):
+    if len(num) == 1:
+        [num.append(0) for _ in range(2)]
+    else:
+        num.insert(0, 0) if len(num) == 2 else num
+
+        if num[1] % num[2] == 0:
+            num[0] += num[1] // num[2]
+            num[1] = 0
+            num[2] = 0
+        else:
+            num[0] += num[1] // num[2]
+            num[1] = int(num[1] % num[2] / g_delimiter1(num[1], num[2]))
+            num[2] = int(num[2] / g_delimiter1(num[1], num[2]))
+    return num
 
 # pattern = re.compile('[+-]?\d+ \d+/\d+')
 tr_num = re.findall('-?\d+? ?\d+/\d+|\d+/\d+|-?\d', str3)
@@ -24,20 +46,6 @@ num = list(map(int, re.split(' |/', tr_num[0])))
 num1 = list(map(int, re.split(' |/', tr_num[3])))
 num2 = list(map(int, re.split(' |/', tr_num[2])))
 
-def optim_num(num):
-
-    [num.append(0) for _ in range(2)] if len(num) == 1 else num
-    num.insert(0, 0) if len(num) == 2 else num
-
-    if num[2] != 0 and num[1] % num[2] == 0:
-        num[0] += num[1] // num[2]
-        num[1] = 0
-        num[2] = 0
-    elif num[2] != 0:
-        num[0] += num[1] // num[2]
-        num[1] = num[1] % num[2]
-
-    return num
 
 
 '''
