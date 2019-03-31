@@ -28,21 +28,23 @@ def optim_num(num):
     '''
     Преобразует входящий список([числитеь, знаменатель]) в список элементов простой дроби.
     Корректирует целую часть и сокращает дробную.
-    :param num: [числитель, знамнатель]
+    :param res: [числитель, знамнатель]
     :return: [целая часть, числитель, знаменатель]
     '''
-    num.insert(0, 0) if len(num) == 2 else num
+    res = num[:]
+    res.insert(0, 0) if len(res) == 2 else res
 
-    if num[1] % num[2] == 0:
-        num[0] += num[1] // num[2]
-        num[1] = 0
-        num[2] = 0
+    if res[1] % res[2] == 0:
+        res[0] += res[1] // res[2]
+        res[1] = 0
+        res[2] = 0
     else:
         # ниже (num[1] / abs(num[1])) корректирует знак
-        num[0] += int(abs(num[1]) // abs(num[2]) * (num[1] / abs(num[1])))
-        num[1] = int(abs(num[1]) % num[2] / g_delimiter1(abs(num[1]), num[2]))
-        num[2] = int(num[2] / g_delimiter1(abs(num[1]), num[2]))
-    return num
+        res[0] += int(abs(res[1]) // abs(res[2]) * (res[1] / abs(res[1])))
+        g_del = g_delimiter1(abs(res[1]), res[2])
+        res[1] = int(abs(res[1]) % res[2] / g_del)
+        res[2] = int(res[2] / g_del)
+    return res
 
 def optim_for_calc(num):
     '''
@@ -64,7 +66,7 @@ def sum_param(num1, num2, sign):
     :param sign: '+'
     :return: [числитель, знаменатель]
     '''
-    num1 = optim_for_calc(list(map(int, re.split(' |/', num1))))
+    num1 = optim_for_calc(list(map(int, re.split(' |/', num1)))) if type(num1) == str else num1
     num2 = optim_for_calc(list(map(int, re.split(' |/', num2))))
 
     if re.match('[-+]', sign) != None:
@@ -72,18 +74,21 @@ def sum_param(num1, num2, sign):
         res1 = [num1[0] * num2[1] + num2[0] * num1[1], num1[1] * num2[1]]
     return res1
 
+def eval_fraction(expr):
+    tr_num = re.findall('-?\d+? ?\d+/\d+|-?\d+/\d+|-?\d', expr)
+    tr_sign = [i.strip() for i in re.findall(' [-+] ', expr)]
 
-tr_num = re.findall('-?\d+? ?\d+/\d+|-?\d+/\d+|-?\d', str3)
-tr_sign =[i.strip() for i in re.findall(' [-+] ', str3)]
+    res = tr_num[0]
+    test_res = []
 
-res = [0, 0]
+    for i in range(len(tr_sign)):
+        res = sum_param(res, tr_num[i + 1], tr_sign[i])
+        test_res.append(res)
+    res = optim_num(res)
+    return f'{expr} = {res[0]} {res[1]}/{res[2]}'
 
-
-
-print(tr_num)
-print(tr_sign)
-print(sum_param(tr_num[0], tr_num[1], tr_sign[0]))
-
+for i in [str1, str2, str3]:
+    print(eval_fraction(i))
 
 # Задание-2:
 # Дана ведомость расчета заработной платы (файл "data/workers").
