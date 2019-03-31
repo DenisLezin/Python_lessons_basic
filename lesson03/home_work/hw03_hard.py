@@ -13,7 +13,7 @@ import re
 
 str1 = '5/6 + 4/7'
 str2 = '-2/3 - -2'
-str3 = '5 4/6 + -7 4/5 - 4/3 + 8'
+str3 = '5 4/6 + -7 4/5 - -4/3 + 8'
 
 def g_delimiter1(n, m):
     nums = [max(n, m), min(n, m)]
@@ -32,13 +32,28 @@ def optim_num(num):
             num[1] = 0
             num[2] = 0
         else:
-            num[0] += num[1] // num[2]
-            num[1] = int(num[1] % num[2] / g_delimiter1(num[1], num[2]))
-            num[2] = int(num[2] / g_delimiter1(num[1], num[2]))
+            num[0] += abs(num[1]) // abs(num[2])
+            if num[1] < 0:
+                num[2] = -num[2]
+                num[0] = -num[0]
+            num[1] = int(num[1] % num[2] / g_delimiter1(abs(num[1]), abs(num[2])))
+            num[2] = int(num[2] / g_delimiter1(abs(num[1]), abs(num[2])))
     return num
 
+# def sum_param(param1, param2, sign):
+#     param1 = optim_num(list(map(int, re.split(' |/', param1))))
+#     param2 = optim_num(list(map(int, re.split(' |/', param2))))
+#
+#     if param1[2] == 0 or param2[2] == 0:
+#         return list(map(sum, zip(param1, param2)))
+#
+#
+#     return param1, param2, sign, res
+
+
+
 # pattern = re.compile('[+-]?\d+ \d+/\d+')
-tr_num = re.findall('-?\d+? ?\d+/\d+|\d+/\d+|-?\d', str3)
+tr_num = re.findall('-?\d+? ?\d+/\d+|-?\d+/\d+|-?\d', str3)
 tr_sign =[i.strip() for i in re.findall(' [-+] ', str3)]
 
 res = [0, 0, 0]
@@ -69,8 +84,8 @@ print('num1   ', num1)
 print('num1_f ', optim_num(num1))
 print('num2   ', num2)
 print('num2_f ', optim_num(num2))
+# print(sum_param(tr_num[2], tr_num[3], tr_sign[0]))
 
-print(res)
 
 # Задание-2:
 # Дана ведомость расчета заработной платы (файл "data/workers").
