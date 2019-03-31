@@ -9,86 +9,86 @@
 # Ввод: -2/3 - -2
 # Вывод: 1 1/3
 
-# import re
-#
-# str1 = '5/6 + 4/7'
-# str2 = '-2/3 - -2'
-# str3 = '5 4/6 + -7 4/5 - -4/3 + 8'
-#
-# def g_delimiter1(n, m):
-#     '''
-#     принимает два числа и возвращает наибольший общий делитель
-#     '''
-#     nums = [max(n, m), min(n, m)]
-#     return nums[len(nums) - 1] if nums[len(nums) - 2] % nums[len(nums) - 1] == 0 else \
-#         g_delimiter1(nums[len(nums) - 1], nums[len(nums) - 2] % nums[len(nums) - 1])
-#
-#
-# def optim_num(num):
-#     '''
-#     Преобразует входящий список([числитеь, знаменатель]) в список элементов простой дроби.
-#     Корректирует целую часть и сокращает дробную.
-#     :param res: [числитель, знамнатель]
-#     :return: [целая часть, числитель, знаменатель]
-#     '''
-#     res = num[:]
-#     res.insert(0, 0) if len(res) == 2 else res
-#
-#     if res[1] % res[2] == 0:
-#         res[0] += res[1] // res[2]
-#         res[1] = 0
-#         res[2] = 0
-#     else:
-#         # ниже (num[1] / abs(num[1])) корректирует знак
-#         res[0] += int(abs(res[1]) // abs(res[2]) * (res[1] / abs(res[1])))
-#         g_del = g_delimiter1(abs(res[1]), res[2])
-#         res[1] = int(abs(res[1]) % res[2] / g_del)
-#         res[2] = int(res[2] / g_del)
-#     return res
-#
-# def optim_for_calc(num):
-#     '''
-#     Приводит дробь к виду [числитель, знаменатель]
-#     '''
-#     if len(num) == 1:
-#         return [num[0], 1]
-#     elif len(num) == 2:
-#         return num
-#     else:
-#         return [int((num[1] + abs(num[0]) * num[2]) * (num[0] / abs(num[0]))), num[2]]
-#
-# def sum_param(num1, num2, sign):
-#     '''
-#     Производит арифметические действия с дробями вида [числитель, знаменатель]
-#     На вход принимает две дроби в виде [числитель, знаменатель] и знак операции - '+'
-#     :param num1: [числитель, знаменатель]
-#     :param num2: [числитель, знаменатель]
-#     :param sign: '+'
-#     :return: [числитель, знаменатель]
-#     '''
-#     num1 = optim_for_calc(list(map(int, re.split(r' |/', num1)))) if type(num1) == str else num1
-#     num2 = optim_for_calc(list(map(int, re.split(r' |/', num2))))
-#
-#     if re.match(r'[-+]', sign) != None:
-#         num2[0] = -num2[0] if sign == '-' else num2[0]
-#         res1 = [num1[0] * num2[1] + num2[0] * num1[1], num1[1] * num2[1]]
-#     return res1
-#
-# def eval_fraction(expr):
-#     tr_num = re.findall(r'-?\d+? ?\d+/\d+|-?\d+/\d+|-?\d', expr)
-#     tr_sign = [i.strip() for i in re.findall(' [-+] ', expr)]
-#
-#     res = tr_num[0]
-#     test_res = []
-#
-#     for i in range(len(tr_sign)):
-#         res = sum_param(res, tr_num[i + 1], tr_sign[i])
-#         test_res.append(res)
-#     res = optim_num(res)
-#     return f'{expr} = {res[0]} {res[1]}/{res[2]}'
-#
-# for i in [str1, str2, str3]:
-#     print(eval_fraction(i))
+import re
+
+str1 = '5/6 + 4/7'
+str2 = '-2/3 - -2'
+str3 = '5 4/6 + -7 4/5 - -4/3 + 8'
+
+def g_delimiter1(n, m):
+    '''
+    принимает два числа и возвращает наибольший общий делитель
+    '''
+    nums = [max(n, m), min(n, m)]
+    return nums[len(nums) - 1] if nums[len(nums) - 2] % nums[len(nums) - 1] == 0 else \
+        g_delimiter1(nums[len(nums) - 1], nums[len(nums) - 2] % nums[len(nums) - 1])
+
+
+def optim_num(num):
+    '''
+    Преобразует входящий список([числитеь, знаменатель]) в список элементов простой дроби.
+    Корректирует целую часть и сокращает дробную.
+    :param res: [числитель, знамнатель]
+    :return: [целая часть, числитель, знаменатель]
+    '''
+    res = num[:]
+    res.insert(0, 0) if len(res) == 2 else res
+
+    if res[1] % res[2] == 0:
+        res[0] += res[1] // res[2]
+        res[1] = 0
+        res[2] = 0
+    else:
+        # ниже (num[1] / abs(num[1])) корректирует знак
+        res[0] += int(abs(res[1]) // abs(res[2]) * (res[1] / abs(res[1])))
+        g_del = g_delimiter1(abs(res[1]), res[2])
+        res[1] = int(abs(res[1]) % res[2] / g_del)
+        res[2] = int(res[2] / g_del)
+    return res
+
+def optim_for_calc(num):
+    '''
+    Приводит дробь к виду [числитель, знаменатель]
+    '''
+    if len(num) == 1:
+        return [num[0], 1]
+    elif len(num) == 2:
+        return num
+    else:
+        return [int((num[1] + abs(num[0]) * num[2]) * (num[0] / abs(num[0]))), num[2]]
+
+def sum_param(num1, num2, sign):
+    '''
+    Производит арифметические действия с дробями вида [числитель, знаменатель]
+    На вход принимает две дроби в виде [числитель, знаменатель] и знак операции - '+'
+    :param num1: [числитель, знаменатель]
+    :param num2: [числитель, знаменатель]
+    :param sign: '+'
+    :return: [числитель, знаменатель]
+    '''
+    num1 = optim_for_calc(list(map(int, re.split(r' |/', num1)))) if type(num1) == str else num1
+    num2 = optim_for_calc(list(map(int, re.split(r' |/', num2))))
+
+    if re.match(r'[-+]', sign) != None:
+        num2[0] = -num2[0] if sign == '-' else num2[0]
+        res1 = [num1[0] * num2[1] + num2[0] * num1[1], num1[1] * num2[1]]
+    return res1
+
+def eval_fraction(expr):
+    tr_num = re.findall(r'-?\d+? ?\d+/\d+|-?\d+/\d+|-?\d', expr)
+    tr_sign = [i.strip() for i in re.findall(' [-+] ', expr)]
+
+    res = tr_num[0]
+    test_res = []
+
+    for i in range(len(tr_sign)):
+        res = sum_param(res, tr_num[i + 1], tr_sign[i])
+        test_res.append(res)
+    res = optim_num(res)
+    return f'{expr} = {res[0]} {res[1]}/{res[2]}'
+
+for i in [str1, str2, str3]:
+    print(eval_fraction(i))
 
 # Задание-2:
 # Дана ведомость расчета заработной платы (файл "data/workers").
@@ -102,8 +102,6 @@ import os
 
 path_workers = os.path.join(os.getcwd(), 'data/workers')
 path_hours = os.path.join(os.getcwd(), 'data/hours_of')
-
-# data_workers = []
 
 with open(path_workers, 'r', encoding='utf-8') as f:
     data_workers = [i.split() for i in f.read().splitlines()]
@@ -146,3 +144,22 @@ for i in data_workers:
 # Подсказка:
 # Чтобы получить список больших букв русского алфавита:
 # print(list(map(chr, range(ord('А'), ord('Я')+1))))
+
+import os
+
+path_fruits = os.path.join(os.getcwd(), 'data/fruits.txt')
+
+with open(path_fruits, 'r', encoding='utf-8') as f:
+    data_fruits = [i for i in f.read().splitlines() if i]
+
+chr_dict = {key: [] for key in list(map(chr, range(ord('А'), ord('Я')+1)))}
+
+for i in data_fruits:
+    chr_dict[i[0]].append(i)
+
+for k, v in chr_dict.items():
+    if v:
+        with open(os.path.join(os.getcwd(), f'data/dict/fruits_{k}.txt'), 'w', encoding='utf-8') as f:
+            f.write('\n'.join(v))
+
+
