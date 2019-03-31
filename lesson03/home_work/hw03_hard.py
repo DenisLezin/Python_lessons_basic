@@ -16,75 +16,73 @@ str2 = '-2/3 - -2'
 str3 = '5 4/6 + -7 4/5 - -4/3 + 8'
 
 def g_delimiter1(n, m):
+    '''
+    принимает два числа и возвращает наибольший общий делитель
+    '''
     nums = [max(n, m), min(n, m)]
     return nums[len(nums) - 1] if nums[len(nums) - 2] % nums[len(nums) - 1] == 0 else \
         g_delimiter1(nums[len(nums) - 1], nums[len(nums) - 2] % nums[len(nums) - 1])
 
 
 def optim_num(num):
-    if len(num) == 1:
-        [num.append(0) for _ in range(2)]
-    else:
-        num.insert(0, 0) if len(num) == 2 else num
+    '''
+    Преобразует входящий список([числитеь, знаменатель]) в список элементов простой дроби.
+    Корректирует целую часть и сокращает дробную.
+    :param num: [числитель, знамнатель]
+    :return: [целая часть, числитель, знаменатель]
+    '''
+    num.insert(0, 0) if len(num) == 2 else num
 
-        if num[1] % num[2] == 0:
-            num[0] += num[1] // num[2]
-            num[1] = 0
-            num[2] = 0
-        else:
-            num[0] += abs(num[1]) // abs(num[2])
-            if num[1] < 0:
-                num[2] = -num[2]
-                num[0] = -num[0]
-            num[1] = int(num[1] % num[2] / g_delimiter1(abs(num[1]), abs(num[2])))
-            num[2] = int(num[2] / g_delimiter1(abs(num[1]), abs(num[2])))
+    if num[1] % num[2] == 0:
+        num[0] += num[1] // num[2]
+        num[1] = 0
+        num[2] = 0
+    else:
+        # ниже (num[1] / abs(num[1])) корректирует знак
+        num[0] += int(abs(num[1]) // abs(num[2]) * (num[1] / abs(num[1])))
+        num[1] = int(abs(num[1]) % num[2] / g_delimiter1(abs(num[1]), num[2]))
+        num[2] = int(num[2] / g_delimiter1(abs(num[1]), num[2]))
     return num
 
-# def sum_param(param1, param2, sign):
-#     param1 = optim_num(list(map(int, re.split(' |/', param1))))
-#     param2 = optim_num(list(map(int, re.split(' |/', param2))))
-#
-#     if param1[2] == 0 or param2[2] == 0:
-#         return list(map(sum, zip(param1, param2)))
-#
-#
-#     return param1, param2, sign, res
+def optim_for_calc(num):
+    '''
+    Приводит дробь к виду [числитель, знаменатель]
+    '''
+    if len(num) == 1:
+        return [num[0], 1]
+    elif len(num) == 2:
+        return num
+    else:
+        return [int((num[1] + abs(num[0]) * num[2]) * (num[0] / abs(num[0]))), num[2]]
+
+def sum_param(num1, num2, sign):
+    '''
+    Производит арифметические действия с дробями вида [числитель, знаменатель]
+    На вход принимает две дроби в виде [числитель, знаменатель] и знак операции - '+'
+    :param num1: [числитель, знаменатель]
+    :param num2: [числитель, знаменатель]
+    :param sign: '+'
+    :return: [числитель, знаменатель]
+    '''
+    num1 = optim_for_calc(list(map(int, re.split(' |/', num1))))
+    num2 = optim_for_calc(list(map(int, re.split(' |/', num2))))
+
+    if re.match('[-+]', sign) != None:
+        num2[0] = -num2[0] if sign == '-' else num2[0]
+        res1 = [num1[0] * num2[1] + num2[0] * num1[1], num1[1] * num2[1]]
+    return res1
 
 
-
-# pattern = re.compile('[+-]?\d+ \d+/\d+')
 tr_num = re.findall('-?\d+? ?\d+/\d+|-?\d+/\d+|-?\d', str3)
 tr_sign =[i.strip() for i in re.findall(' [-+] ', str3)]
 
-res = [0, 0, 0]
-num = list(map(int, re.split(' |/', tr_num[0])))
-num1 = list(map(int, re.split(' |/', tr_num[3])))
-num2 = list(map(int, re.split(' |/', tr_num[2])))
+res = [0, 0]
 
 
-
-'''
-    denominator
-'''
-# if res[2] == 0:
-#     res[2] == num[2]
-'''
-    numerator
-'''
-
-'''
-   integer
-'''
 
 print(tr_num)
 print(tr_sign)
-print('num    ', num)
-print('num_f  ', optim_num(num))
-print('num1   ', num1)
-print('num1_f ', optim_num(num1))
-print('num2   ', num2)
-print('num2_f ', optim_num(num2))
-# print(sum_param(tr_num[2], tr_num[3], tr_sign[0]))
+print(sum_param(tr_num[0], tr_num[1], tr_sign[0]))
 
 
 # Задание-2:
