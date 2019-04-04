@@ -27,7 +27,8 @@ print(f'{lst1}\n{lst2}\n{[i for i in lst1 if i in lst2]}')
 
 lst = [random.randint(1, 100) for _ in range(20)]
 
-print(lst, [i for i in lst if i % 3 == 0\
-                          and i % 2 == 0\
-                          and i % 4 != 0], sep='\n')
+print(lst, [i for i in lst\
+            if i % 3 == 0\
+            and i % 2 == 0\
+            and i % 4 != 0], sep='\n')
 
