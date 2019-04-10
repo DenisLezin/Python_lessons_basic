@@ -10,29 +10,57 @@
 # и выводит результат действия: "Успешно создано/удалено/перешел",
 # "Невозможно создать/удалить/перейти"
 
-#-----------------------------------------------------------
-# заготовки для модуля
-# def make_dir1(directory):
-# #    directory = os.path.join(os.getcwd(), dname)
-#     if not os.path.exists(directory):
-#         os.mkdir(directory)
-#         print('Created directory: ' + dname)
-#     else:
-#         print('Directory alredy exists')
-#
-# def remove_dir1(directory):
-# #    directory = os.path.join(os.getcwd(), dname)
-#     if os.path.exists(directory):
-#         os.rmdir(directory)
-#         print('Deleted directory: ' + dname)
-#     else:
-#         print('There is no such directory')
-#------------------------------------------------------------
-from easy import make_dir1, remove_dir1
+from easy import make_dir, remove_dir, change_dir
 import os
 import sys
+import shutil
 
-cur_dir = os.getcwd()
+
+def print_help():
+    print(f'\nСейчас вы находитесь: {os.getcwd()}')
+    print(f'Вы можете выбрать:\n')
+    print(f'1. Перейти в другую директорию')
+    print(f'2. Просмотреть содержимое текущей директории')
+    print(f'3. Удалить директорию')
+    print(f'4. Создать директорию')
+    print(f'5. Вернуться в исходную директорию')
+    print(f'6. Закончить работу')
+    return input(f'Выберите пункт меню: ')
+
+do = {
+    '1': change_dir,
+    '2': os.listdir,
+    '3': remove_dir,
+    '4': make_dir,
+    }
+
+answer = ''
+
+while answer != 'q':
+#    os.system('clear') if os.name == 'posix' else os.system('cls')
+    answer = print_help()
+    if answer == '1':
+        dir_name = input(f'Введите полное имя директории: ')
+        do[answer](dir_name)
+    elif answer in ['3', '4']:
+        dir_name = input(f'Введите имя директории: ')
+        do[answer](dir_name)
+    elif answer == '2':
+        print(f'Список директорий и файлов:\n{do[answer]()}')
+    elif answer == '5':
+        change_dir(os.path.dirname(os.path.abspath(__file__)))
+    elif answer == '6':
+        break
+    else:
+        print('Такого пункта в меню нет')
+        continue
+    input('Для продолжения нажмите Enter')
+
+
+
+
+
+# print(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Для решения данной задачи используйте алгоритмы из задания easy,
